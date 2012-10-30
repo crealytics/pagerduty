@@ -1,4 +1,3 @@
-*.lock
 rdoc
 *.log
 .DS_Store
