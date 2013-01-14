@@ -27,6 +27,17 @@ class Pagerduty
     PagerdutyIncident.new @service_key, resp["incident_key"]
   end
 
+  # trigger or resolve the incident (identified by incident_key)
+  # depending on state parameter
+  def trigger_or_resolve(state, description, details = {})
+    if state
+      incident = get_incident @incident_key if @incident_key
+      incident.resolve message if incident
+    else
+      trigger message, details
+    end
+  end
+
   def get_incident(incident_key)
     PagerdutyIncident.new @service_key, incident_key
   end
