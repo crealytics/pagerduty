@@ -21,6 +21,7 @@ class Pagerduty
   end
 
   def trigger(description, details = {})
+    details.merge!({hostname: `hostname -f`})
     resp = api_call("trigger", description, details)
     throw PagerdutyException.new(self, resp) unless resp["status"] == "success"
 
