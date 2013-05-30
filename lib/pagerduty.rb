@@ -12,7 +12,6 @@ class PagerdutyException < Exception
 end
 
 class Pagerduty
-
   attr_reader :service_key, :incident_key
 
   def initialize(service_key, incident_key = nil)
@@ -50,7 +49,6 @@ protected
 
     url = URI.parse("http://events.pagerduty.com/generic/2010-04-15/create_event.json")
 
-
     http = Net::HTTP.new(url.host, url.port)
 
     req = Net::HTTP::Post.new(url.request_uri)
@@ -64,11 +62,9 @@ protected
       res.error!
     end
   end
-
 end
 
 class PagerdutyIncident < Pagerduty
-
   def initialize(service_key, incident_key)
     super service_key
     @incident_key = incident_key
@@ -87,5 +83,4 @@ class PagerdutyIncident < Pagerduty
 
     self
   end
-
 end
