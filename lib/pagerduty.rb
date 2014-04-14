@@ -18,14 +18,29 @@ class Pagerduty
   def initialize(service_key, incident_key = nil)
     @service_key = service_key
     @incident_key = incident_key
+    enable!
   end
 
   def trigger(description, details = {})
-    details = {hostname: `hostname -f`.strip, process_name: $PROGRAM_NAME}.merge(details)
-    resp = api_call("trigger", description, details)
-    throw PagerdutyException.new(self, resp) unless resp["status"] == "success"
+    if enabled?
+      details = {hostname: `hostname -f`.strip, process_name: $PROGRAM_NAME}.merge(details)
+      resp = api_call("trigger", description, details)
+      throw PagerdutyException.new(self, resp) unless resp["status"] == "success"
 
-    PagerdutyIncident.new @service_key, resp["incident_key"]
+      PagerdutyIncident.new @service_key, resp["incident_key"]
+    end
+  end
+
+  def disable!
+    @enabled = false
+  end
+
+  def enable!
+    @enabled = true
+  end
+
+  def enabled?
+    @enabled
   end
 
   # trigger or resolve the incident (identified by incident_key)
@@ -51,11 +66,13 @@ class Pagerduty
   end
 
   def resolve(incident_key = nil, description: nil)
-    key = incident_key || @incident_key
-    return unless key
-    incident = get_incident(key)
-    return unless incident
-    incident.resolve description
+    if enabled?
+      key = incident_key || @incident_key
+      return unless key
+      incident = get_incident(key)
+      return unless incident
+      incident.resolve description
+    end
   end
 
   def get_incident(incident_key)
