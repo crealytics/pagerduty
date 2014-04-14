@@ -39,6 +39,25 @@ class Pagerduty
     end
   end
 
+  def monitor
+    begin
+      ret = yield
+      resolve
+      ret
+    rescue Exception => e
+      trigger e.to_s, exception_class: e.class, stacktrace: e.backtrace
+      raise
+    end
+  end
+
+  def resolve(incident_key = nil, description: nil)
+    key = incident_key || @incident_key
+    return unless key
+    incident = get_incident(key)
+    return unless incident
+    incident.resolve description
+  end
+
   def get_incident(incident_key)
     PagerdutyIncident.new @service_key, incident_key
   end
