@@ -47,8 +47,7 @@ class Pagerduty
   # depending on state parameter
   def trigger_or_resolve(state, description, details = {})
     if state
-      incident = get_incident @incident_key if @incident_key
-      incident.resolve description if incident
+      resolve(description: description)
     else
       trigger description, details
     end
