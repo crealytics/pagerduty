@@ -64,13 +64,13 @@ class Pagerduty
     end
   end
 
-  def resolve(incident_key = nil, description: nil)
+  def resolve(incident_key = nil, options = {})
     if enabled?
       key = incident_key || @incident_key
       return unless key
       incident = get_incident(key)
       return unless incident
-      incident.resolve description
+      incident.resolve options[:description]
     end
   end
 

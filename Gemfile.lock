@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    pagerduty (1.4.0)
+    pagerduty (1.4.1)
       json (>= 1.7.7)
 
 GEM
