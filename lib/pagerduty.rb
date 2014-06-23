@@ -47,7 +47,7 @@ class Pagerduty
   # depending on state parameter
   def trigger_or_resolve(state, description, details = {})
     if state
-      resolve(description: description)
+      resolve(nil, description)
     else
       trigger description, details
     end
@@ -64,7 +64,7 @@ class Pagerduty
     end
   end
 
-  def resolve(incident_key = nil, description: nil)
+  def resolve(incident_key = nil, description = nil)
     if enabled?
       key = incident_key || @incident_key
       return unless key
