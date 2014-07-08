@@ -98,13 +98,24 @@ protected
     req = Net::HTTP::Post.new(url.request_uri)
     req.body = JSON.generate(params)
 
-    res = http.request(req)
+    try = 0
+    begin
+      sleep(backoff(try))
+      res = http.request(req)
+      try = try + 1
+    end while res.code == 403
+
     case res
     when Net::HTTPSuccess, Net::HTTPRedirection
       JSON.parse(res.body)
     else
       res.error!
     end
+  end
+
+  def backoff(try)
+    try = 3 if try > 3
+    return 2**try - 1
   end
 end
 
