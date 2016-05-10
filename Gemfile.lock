@@ -8,9 +8,14 @@ GEM
   remote: https://rubygems.org/
   specs:
     json (1.8.1)
+    rake (11.1.2)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   pagerduty!
+  rake
+
+BUNDLED WITH
+   1.11.2
